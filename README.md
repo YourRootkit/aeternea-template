@@ -1,6 +1,6 @@
 # Aeternea
 
-A personal knowledge base that an LLM agent builds and maintains for you.
+About a personal knowledge base that an LLM agent builds and maintains for you.
 
 Plain markdown, browsed in [Obsidian](https://obsidian.md), versioned in git, written by an agentic CLI (Claude Code, Codex, OpenCode…). You curate sources and ask questions; the agent does the summarizing, cross-referencing, filing and bookkeeping.
 
