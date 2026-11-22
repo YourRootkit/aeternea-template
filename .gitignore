@@ -1,0 +1,23 @@
+# Estado local de Obsidian — específico de cada máquina
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/
+.obsidian/themes/
+.trash/
+
+# Material íntimo preparado y aún sin leer: solo local, nunca al remoto.
+# Ojo: lo ignorado tampoco lo respalda git — ten otra copia.
+_privado/
+
+# ¿Fuentes con copyright o muy pesadas? Descomenta para no versionar el buffer.
+# Los nodos generados a partir de ellas SÍ se siguen versionando.
+# 01_Buffer_de_entrada/**
+# !01_Buffer_de_entrada/.gitkeep
+# !01_Buffer_de_entrada/_procesados/
+# !01_Buffer_de_entrada/_procesados/.gitkeep
+
+# Ruido del sistema
+.DS_Store
+Thumbs.db
+__pycache__/

@@ -1,0 +1,11 @@
+#!/bin/sh
+# Hook pre-commit de Aeternea: ningún commit entra con un 🔴 del lint estructural (SCHEMA §12).
+# Además: un nodo `inmutable: true` no se modifica ni se borra, y un nodo que cambia lleva
+# `última_actualización` al día.
+#
+#   Activar (una vez por clon):   git config core.hooksPath _herramientas/hooks
+#   Migración mecánica:           AETERNEA_MIGRACION=1 git commit ...     (no exige la fecha)
+#   Lo ha pedido el usuario:      AETERNEA_PERMITIR_INMUTABLE=1 git commit ...
+#   Emergencia:                   git commit --no-verify
+raiz=$(git rev-parse --show-toplevel) || exit 1
+exec python3 "$raiz/_herramientas/lint_estructura.py" "$raiz" --commit
