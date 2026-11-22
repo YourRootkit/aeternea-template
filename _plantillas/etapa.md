@@ -18,5 +18,5 @@ creation_date: YYYY-MM-DD
 ## Hitos que importaron
 <!-- Solo los que marcaron una dirección, cerraron una puerta o enseñaron algo vigente. -->
 
-## Eventos (ventana activa — 10-15)
+## Eventos (ventana activa — máx. 10)
 <!-- Al cerrar la etapa, el detalle baja a personal/_historial_trayectoria/<etapa>.md -->

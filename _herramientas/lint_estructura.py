@@ -49,6 +49,7 @@ DOMINIOS = {"technical", "personal", "meta"}
 ORIGENES = {"explícito", "inferido"}
 REGLA_ORIGEN = datetime.date(2026, 8, 3)  # §13: `origen_enlace` obligatorio desde este día; no es retroactivo
 SIN_FRONTMATTER = {"index_tecnico.md", "index_personal.md", "log.md", "README.md"}  # capa humana, por diseño
+SIN_DESTINO = {"_plantillas"}  # andamios: `[[evento]]` no puede darse por bueno contra `_plantillas/evento.md`
 
 # SCHEMA §6 — (aviso, techo duro) por (tipo_nodo, domain). None = cualquier dominio.
 # Se cuenta el cuerpo: sin frontmatter y sin comentarios HTML.
@@ -383,6 +384,19 @@ def cambios_del_commit(raiz):
     return [(campos[i], campos[i + 1]) for i in range(0, len(campos) - 1, 2)]
 
 
+def es_inmutable(crudo):
+    """¿El frontmatter declara `inmutable: true`? Se lee como YAML: con una regex de línea, un
+    comentario detrás del valor (`inmutable: true  # …`) escondía el nodo al hook."""
+    try:
+        fm = yaml.safe_load(crudo)
+    except (yaml.YAMLError, ValueError):
+        fm = None
+    if isinstance(fm, dict):
+        return fm.get("inmutable") is True
+    # Frontmatter ilegible: ante la duda, se protege (regla de oro, SCHEMA §7)
+    return re.search(r"^inmutable:\s*true\b", crudo, re.M | re.I) is not None
+
+
 def inmutables_tocados(raiz, cambios):
     """Nodos `inmutable: true` que el commit modifica o borra (regla de oro, SCHEMA §7)."""
     rojo = []
@@ -393,7 +407,7 @@ def inmutables_tocados(raiz, cambios):
         if anterior.returncode != 0:
             continue
         crudo, _ = partir(anterior.stdout.decode("utf-8", "replace").replace("\r\n", "\n"))
-        if crudo and re.search(r"^inmutable:\s*true\s*$", crudo, re.M):
+        if crudo and es_inmutable(crudo):
             verbo = "borra" if estado == "D" else "modifica"
             rojo.append(f"{ruta}: el commit {verbo} un nodo `inmutable: true` — no se toca "
                         "(si lo ha pedido el usuario: AETERNEA_PERMITIR_INMUTABLE=1)")
@@ -436,7 +450,8 @@ def main():
         salir(f"No encuentro {wiki}")
 
     visibles = [p for p in raiz.rglob("*")
-                if p.is_file() and not any(parte.startswith(".") for parte in p.relative_to(raiz).parts)]
+                if p.is_file() and not any(parte.startswith(".") for parte in p.relative_to(raiz).parts)
+                and p.relative_to(raiz).parts[0] not in SIN_DESTINO]
     existentes = {p.name.lower() for p in visibles} | {p.stem.lower() for p in visibles if p.suffix == ".md"}
     vault = {"raiz": raiz, "wiki": wiki, "ejes": vocabulario_cerrado(raiz),
              "existentes": existentes, "hoy": datetime.date.today()}

@@ -27,7 +27,7 @@ Toda página creada o actualizada en el wiki empieza, como mínimo, con:
 
 ```yaml
 ---
-tipo_nodo: hub | faceta | evento | insight | concepto | fuente | etapa   # uno solo — SCHEMA §3
+tipo_nodo: hub | faceta | evento | insight | concepto | fuente | etapa   # uno solo — SCHEMA §3 (`meta`: solo el backlog)
 domain: technical | personal   # uno solo. meta: solo los archivos del propio sistema (overview, backlog)
 creation_date: YYYY-MM-DD
 última_actualización: YYYY-MM-DD   # la fecha de hoy cada vez que el nodo cambia

@@ -2,7 +2,7 @@
 tipo_nodo: meta
 domain: meta
 creation_date: 2026-10-29
-última_actualización: 2026-11-16
+última_actualización: 2026-11-22
 naturaleza: backlog_arquitectónico_vivo
 ---
 
@@ -33,7 +33,7 @@ La optimización de tokens, la atomización severa y los techos cuantitativos si
 
 ### Embeddings vectoriales (discovery semántico)
 - **Qué resolverían:** búsqueda por significado ("esa persona que me hizo sentir así"), no por palabras clave.
-- **Por qué se difieren:** con los dos índices, aliases exhaustivos y el descubrimiento en tres capas (SCHEMA §7), el grep basta: el coste de L0 → L1 → L2 no crece con el tamaño del vault.
+- **Por qué se difieren:** con los dos índices, aliases exhaustivos y el descubrimiento en tres capas (SCHEMA §7), el grep basta: L1 y L2 no crecen con el tamaño del vault, y L0 solo con el número de hubs.
 - **Cuándo retomar:** cuando una búsqueda real falle por no compartir palabras con el nodo que buscabas. El tamaño solo no basta: el vault del que sale esta plantilla pasó de 200 nodos sin que fallara ninguna.
 - **Forma preferida:** un buscador local híbrido (BM25 + vectores) con CLI o MCP, para que el agente lo llame sin sacar los datos de la máquina.
 

@@ -5,7 +5,7 @@ domain: personal
 estado: activo
 aliases: [trayectoria, carrera, evolución profesional, etapas, historia profesional]
 creation_date: 2026-10-29
-última_actualización: 2026-10-29
+última_actualización: 2026-11-22
 ---
 
 # Trayectoria
@@ -22,7 +22,7 @@ Un hub plano con cientos de hitos hace que cada consulta L1 devuelva cientos de 
 
 ## Ciclo de vida de una etapa
 
-1. **Activa** — sus eventos cuelgan vivos. Ventana de ~10-15 (SCHEMA §6).
+1. **Activa** — sus eventos cuelgan vivos. Ventana de 10 eventos (SCHEMA §6).
 2. **Al cerrarse** — se consolida en síntesis + hitos que de verdad importaron.
 3. **El detalle completo** baja a `personal/_historial_trayectoria/<etapa>.md` — append-only, invisible al Lint y al pre-flight. **Nada se pierde**: se lee solo bajo demanda.
 

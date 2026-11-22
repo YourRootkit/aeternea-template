@@ -8,4 +8,12 @@
 #   Lo ha pedido el usuario:      AETERNEA_PERMITIR_INMUTABLE=1 git commit ...
 #   Emergencia:                   git commit --no-verify
 raiz=$(git rev-parse --show-toplevel) || exit 1
-exec python3 "$raiz/_herramientas/lint_estructura.py" "$raiz" --commit
+# `python3` no siempre existe (Git Bash en Windows) y a veces es un atajo que no arranca:
+# vale el primero que ejecute de verdad un Python 3.7 o posterior.
+for py in python3 python; do
+    if "$py" -c 'import sys; sys.exit(sys.version_info < (3, 7))' >/dev/null 2>&1; then
+        exec "$py" "$raiz/_herramientas/lint_estructura.py" "$raiz" --commit
+    fi
+done
+echo "Hook de Aeternea: no encuentro Python 3.7+ (ni python3 ni python). Commit bloqueado." >&2
+exit 1

@@ -78,6 +78,8 @@ La **estructura** es universal; el **frontmatter** se bifurca por dominio.
 | `fuente` | Documento procesado tal cual | literaria, episódica | externa, legacy |
 | `etapa` | **Agrupador temporal dentro de un hub acumulativo** | periodo vital | fase de proyecto |
 
+**`meta`** no es un arquetipo: lo lleva solo el backlog del propio sistema (`aeternea-desafios-pendientes.md`), con `domain: meta`. No entra en L0 ni tiene techo.
+
 **`etapa`.** Capa intermedia para hubs de **régimen acumulativo** — donde nada reemplaza a nada y los hijos crecen sin techo (trayectoria, y a futuro cualquier entidad con años de eventos). Sin ella, L1 sobre el hub devuelve cientos de hitos. Con ella devuelve **etapas**, que crecen una o dos por año.
 
 - **No entra en L0** aunque agrupe: es navegación interna, no punto de entrada. L0 solo lleva el hub raíz.
@@ -189,7 +191,7 @@ Tag de naturaleza, ortogonal al tipo_nodo:
 
 Antes de añadir una, comprueba que no solapa con una casilla de identidad: una taxonomía `filosofia`, por ejemplo, duplicaría `id-valores-proposito` en cada ingest.
 
-`literatura` es subtipo de `fuente` (§7), no taxonomía.
+`literatura` no es una taxonomía con modelo propio: sus textos son `fuente` con `subtipo: literaria` e `inmutable: true` (§7). El `arquetipo_taxonomico: literatura` de su hub y de sus textos solo marca la rama.
 
 ---
 
@@ -278,7 +280,7 @@ Se paga un barrio, nunca la ciudad. El coste queda atado al número de hijos de 
 
 **L2 — el nodo.** Se abre entero, y sólo el que se va a usar o comprobar.
 
-**Propiedad clave:** el coste del descubrimiento **no crece con el tamaño del vault**. Con 900 nodos, un ingest sobre una entidad sigue costando lo mismo que con 90, porque esa entidad sigue teniendo un puñado de hijos.
+**Propiedad clave:** el coste del descubrimiento **no crece con el número de nodos**. L0 crece solo con el número de hubs —una línea por persona o proyecto, y despacio—; L1 y L2, con los hijos del tema que se toca. Con 900 nodos, un ingest sobre una entidad sigue costando lo mismo que con 90, porque esa entidad sigue teniendo un puñado de hijos.
 
 ### REGLA DURA — Anti-solapamiento acotado
 
@@ -407,7 +409,6 @@ La fragmentación es la unidad base de toda la arquitectura. NUNCA silenciosa, N
 ```
 ─────────────────────────────────────
 La nota [[X]] ha crecido a N palabras.
-Sé que piensas mejor cuando cada cosa está en su sitio.
 Te propongo separarla — sin perder nada, sin cambiar su clasificación:
 
   1️⃣  [[x-tema-a]]  — [qué recoge]

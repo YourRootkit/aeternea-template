@@ -238,6 +238,13 @@ class Enlaces(Caso):
         self.escribe("a.md", nodo("# a\n[web](https://example.org/x.md) [correo](mailto:a@example.org) [aquí](#arriba)\n"))
         self.pasa()
 
+    def test_un_enlace_no_resuelve_contra_las_plantillas(self):
+        # rojo que no salía: `[[evento]]` se daba por bueno porque existe `_plantillas/evento.md`
+        (self.raiz / "_plantillas").mkdir()
+        (self.raiz / "_plantillas" / "evento.md").write_text("---\ntipo_nodo: evento\n---\n", encoding="utf-8")
+        self.escribe("a.md", nodo("# a\n[[evento]]\n"))
+        self.da_rojo("enlace roto [[evento]]")
+
     def test_los_enlaces_dentro_de_codigo_no_cuentan(self):
         self.escribe("a.md", nodo("# a\n`[[ejemplo]]` y\n```\n[[otro]] [x](no.md)\n```\n"))
         self.pasa()
@@ -366,6 +373,35 @@ class LoQueEntraEnUnCommit(Caso):
         (self.raiz / "02_Wiki" / "carta.md").unlink()
         self.git("add", "-A")
         self.da_rojo("borra un nodo `inmutable: true`", "--commit")
+
+    def test_inmutable_con_comentario_detras_tambien_bloquea(self):
+        # fallo real (2026-11-22): el hook buscaba `inmutable: true` con una regex de línea entera,
+        # y un comentario detrás del valor le escondía la carta
+        valor = "true   # exento de techos"
+        self.repo_con(carta_md=nodo("# Carta\ntexto original\n", tipo_nodo="fuente", inmutable=valor), a_md=nodo())
+        self.escribe("carta.md", nodo("# Carta\ntexto resumido\n", tipo_nodo="fuente", inmutable=valor))
+        self.git("add", "-A")
+        self.da_rojo("modifica un nodo `inmutable: true`", "--commit")
+        self.git("rm", "-q", "--cached", "02_Wiki/carta.md")
+        self.da_rojo("borra un nodo `inmutable: true`", "--commit")
+
+    def test_las_plantillas_inmutables_quedan_protegidas(self):
+        # contrato entre `_plantillas/` y el hook: cada línea `inmutable:` que se publica, tal cual,
+        # tiene que bloquear el commit. Sin `_plantillas/` (el vault vivo no la trae), no aplica.
+        plantillas = LINT.parents[1] / "_plantillas"
+        lineas = [l for p in sorted(plantillas.glob("*.md")) for l in p.read_text(encoding="utf-8").splitlines()
+                  if l.startswith("inmutable:")] if plantillas.is_dir() else []
+        if not lineas:
+            self.skipTest("no hay `_plantillas/` con nodos inmutables")
+        valores = [l.split(":", 1)[1].strip() for l in lineas]
+        self.repo_con(**{f"carta{i}_md": nodo("# Carta\noriginal\n", tipo_nodo="fuente", inmutable=v)
+                         for i, v in enumerate(valores)})
+        for i, v in enumerate(valores):
+            self.escribe(f"carta{i}.md", nodo("# Carta\nresumida\n", tipo_nodo="fuente", inmutable=v))
+        self.git("add", "-A")
+        salida = self.da_rojo("modifica un nodo `inmutable: true`", "--commit")
+        for i in range(len(valores)):
+            self.assertIn(f"carta{i}.md: el commit modifica", salida)
 
     def test_el_usuario_puede_autorizar_tocar_un_inmutable(self):
         self.repo_con(carta_md=nodo("# Carta\ncon una errata\n", tipo_nodo="fuente", inmutable="true"))

@@ -13,7 +13,7 @@ Catálogo del dominio personal. Las **personas** se navegan por vistas dimension
 TABLE WITHOUT ID file.link AS Persona, rol_dinamica AS Rol, intensidad AS Intensidad
 FROM "02_Wiki/personal/entidades_sociales"
 WHERE tipo_nodo = "hub" AND cercania = "nucleo"
-SORT intensidad DESC
+SORT choice(intensidad = "Overclocking", 4, choice(intensidad = "alta", 3, choice(intensidad = "media", 2, 1))) DESC
 ```
 
 ### En Overclocking *(consumiendo toda la banda ahora mismo)*
@@ -35,7 +35,7 @@ WHERE tipo_nodo = "hub" AND rol_dinamica = "antagonista"
 TABLE WITHOUT ID file.link AS Persona, cercania AS Cercanía, rol_dinamica AS Rol, intensidad AS Intensidad
 FROM "02_Wiki/personal/entidades_sociales"
 WHERE tipo_nodo = "hub"
-SORT cercania ASC, intensidad DESC
+SORT choice(cercania = "nucleo", 1, choice(cercania = "cercana", 2, choice(cercania = "orbita", 3, 4))) ASC, choice(intensidad = "Overclocking", 4, choice(intensidad = "alta", 3, choice(intensidad = "media", 2, 1))) DESC
 ```
 
 ---
